@@ -1,5 +1,4 @@
 from datetime import datetime
-from pprint import pprint
 
 import pyowm
 
@@ -22,7 +21,6 @@ class Weather(object):
         if not place_cache or (now - last_updated).total_seconds() >= self.update_interval:
             self.weather_data[place] = self.api_object.weather_at_place(place).get_weather()
             self.update_stamps[place] = datetime.now()
-            pprint(self.weather_data[place].to_JSON())
 
     def now(self, place):
         self.refresh(place)

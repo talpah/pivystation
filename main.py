@@ -49,7 +49,6 @@ class KeyHandler(object):
         if key in self._callbacks:
             for cb in self._callbacks[key]:
                 cb(key)
-            return True
         return False
 
 
