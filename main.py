@@ -124,12 +124,9 @@ class TimerWidget(LabelB):
         self.timer_provider = Timer()
         self.alarmsound = SoundLoader.load(os.path.join(PROJECT_PATH, 'libs', 'timer', 'beep.wav'))
 
-        for key in Timer.number_keys:
+        for key in Timer.all_keys:
             self.app.key_handler.bind(key, self.timer_provider.key)
-        for key in Timer.terminator_keys:
-            self.app.key_handler.bind(key, self.timer_provider.done)
-        for key in Timer.reset_keys:
-            self.app.key_handler.bind(key, self.timer_provider.reset)
+            self.app.key_handler.bind(key, self.update_timer)
 
         Clock.schedule_interval(self.update_timer, 0.5)
         Clock.schedule_interval(self.timer_provider.countdown, 1)

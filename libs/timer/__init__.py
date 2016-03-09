@@ -36,6 +36,7 @@ class Timer(object):
     terminator_keys = ['enter', 'numpadenter']
     reset_keys = ['escape', 'backspace']
     alarm_reset_keys = ['enter', 'numpadenter', 'escape', 'backspace', 'space']
+    all_keys = number_keys.keys() + reset_keys + alarm_reset_keys
 
     def reset(self, *args):
         self.is_editing = False
