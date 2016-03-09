@@ -1,0 +1,85 @@
+#:import SimpleTableLayout libs.garden.simpletablelayout.SimpleTableLayout
+#:import LabelB libs.LabelB
+<MainScreen>:
+    SimpleTableLayout:
+        rows: 2
+        cols: 3
+        WeatherWidget:
+        BoxLayout:
+        BoxLayout:
+            orientation: 'vertical'
+            ClockWidget:
+            TimerWidget:
+        NewsWidget:
+
+<WeatherWidget>:
+    orientation: 'vertical'
+    Label:
+        id: 'locationlabel'
+        text: root.location_label
+        font_size: 48
+        color: 1.000, 0.980, 0.804, 1
+        valign: 'top'
+    BoxLayout:
+        Image:
+            source: root.weathericon_source
+            allow_stretch: True
+            size_hint: 1, 1.8
+            pos_hint: {'center_y': 0.5}
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                id: 'temperaturelabel'
+                text: root.temperature_label
+                font_size: 96
+                color: 1.000, 0.980, 0.804, 1
+            Label:
+                id: 'temperatureminmaxlabel'
+                text: root.temperatureminmax_label
+                font_size: 36
+                color: 0.8, 0.8, 0.8, 1
+    Label:
+        id: 'weatherupdatedlabel'
+        text: root.weatherupdated_label
+        font_size: 32
+        color: 0.5, 0.5, 0.5, 1
+        valign: 'top'
+
+<TimerWidget>:
+    id: 'timertext'
+    text: root.timer_text
+    font_size: 120
+    color: root.timer_color
+    bcolor: root.timer_bgcolor
+    valign: 'top'
+
+<NewsWidget>:
+    colspan: 3
+    text_size: self.size
+    halign: 'left'
+    valign: 'top'
+    markup: True
+    text: root.news_items
+    font_size: 40
+
+<ClockWidget>:
+    Label:
+        id: 'datetext'
+        text: root.date_text
+        font_size: 48
+        color: 1.000, 0.980, 0.804, 1
+        valign: 'top'
+    Label:
+        id: 'clocktext'
+        text: root.clock_text
+        font_size: 120
+        color: 1.000, 0.980, 0.804, 1
+        valign: 'top'
+
+<ForecastScreen>:
+    BoxLayout:
+        Button:
+            text: 'My settings button'
+        Button:
+            text: 'Back to menu'
+            on_press: root.manager.current = 'menu'
