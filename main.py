@@ -38,6 +38,7 @@ class KeyHandler(object):
 
     def on_keyboard_down(self, keyboard, keycode, text, modifiers):
         key = keycode[1]  # Textual representation of key
+        # print(key)
         if key in self._callbacks:
             for cb in self._callbacks[key]:
                 cb(key)

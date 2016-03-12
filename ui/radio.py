@@ -27,12 +27,9 @@ class RadioWidget(BoxLayout):
         self.play_status = 'Oprit'
         self.volume_value = 'Volum 100%'
 
-        self.app.key_handler.bind('f2', self.playpause)
-        self.app.key_handler.bind('f3', self.next_stream)
-        self.app.key_handler.bind('+', self.vol_up)
-        self.app.key_handler.bind('=', self.vol_up)
+        self.app.key_handler.bind('numpaddivide', self.playpause)
+        self.app.key_handler.bind('numpadmul', self.next_stream)
         self.app.key_handler.bind('numpadadd', self.vol_up)
-        self.app.key_handler.bind('-', self.vol_down)
         self.app.key_handler.bind('numpadsubstract', self.vol_down)
 
         if self.config.get('radio', 'play_on_start').lower() in ['true', 'yes', 'y', '1']:
