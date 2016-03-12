@@ -28,6 +28,8 @@ class RadioWidget(BoxLayout):
 
         self.app.key_handler.bind('f2', self.playpause)
         self.app.key_handler.bind('f3', self.next_stream)
+        if self.config.get('radio', 'play_on_start').lower() in ['true', 'yes', 'y', '1']:
+            self.play()
 
     def select_stream(self, url):
         self.current_stream = MySoundLoader.load(url)

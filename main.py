@@ -73,7 +73,8 @@ class MainApp(App):
 
     def build_config(self, config):
         config.setdefaults('news', {'cycle_interval': 15, 'provider': 'mediafax'})
-        config.setdefaults('radio', {'streams': "\nhttp://astreaming.europafm.ro:8000/europafm_aacp48k#aac"
+        config.setdefaults('radio', {'play_on_start': 'no',
+                                     'streams': "\nhttp://astreaming.europafm.ro:8000/europafm_aacp48k#aac"
                                                 "\nhttp://edge126.rdsnet.ro:84/profm/dancefm.mp3"})
         config.setdefaults('weather', {'temperature_unit_display': 'C', 'language': 'ro', 'temperature_unit': 'celsius',
                                        'provider': 'openweathermap', 'api_key': '1a6b3c983f34975e1634037a882c365a',
