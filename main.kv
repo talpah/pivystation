@@ -5,12 +5,64 @@
         rows: 2
         cols: 3
         WeatherWidget:
-        BoxLayout:
+        RadioWidget:
         BoxLayout:
             orientation: 'vertical'
             ClockWidget:
             TimerWidget:
         NewsWidget:
+
+<ForecastScreen>:
+    BoxLayout:
+        Button:
+            text: 'My settings button'
+        Button:
+            text: 'Back to menu'
+            on_press: root.manager.current = 'menu'
+
+
+<RadioWidget>:
+    orientation: 'vertical'
+    Label:
+        id: 'radiolabel'
+        text: root.radio_label
+        font_size: 48
+        color: 1.000, 0.980, 0.804, 1
+        valign: 'top'
+    BoxLayout:
+        LabelB:
+            bcolor: 0.184, 0.310, 0.310, 1
+            text: '[F2] Play/Pause'
+            font_size: 36
+            size_hint: 0, 0
+            size: self.texture_size
+            padding: 30, 30
+        LabelB:
+            bcolor: 0, 0, 0, 1
+            text: ''
+            font_size: 36
+            size_hint: 0, 0
+            size: 30, 30
+        LabelB:
+            bcolor: 0.184, 0.310, 0.310, 1
+            text: '[F3] Next'
+            font_size: 36
+            size_hint: 0, 0
+            size: self.texture_size
+            padding: 30, 30
+    BoxLayout:
+        Label:
+            font_size: 36
+            text: root.play_status
+            text_size: self.size
+            halign: 'left'
+            valign: 'middle'
+        Label:
+            font_size: 36
+            text: root.volume_value
+            text_size: self.size
+            halign: 'right'
+            valign: 'middle'
 
 <WeatherWidget>:
     orientation: 'vertical'
@@ -75,11 +127,3 @@
         font_size: 120
         color: 1.000, 0.980, 0.804, 1
         valign: 'top'
-
-<ForecastScreen>:
-    BoxLayout:
-        Button:
-            text: 'My settings button'
-        Button:
-            text: 'Back to menu'
-            on_press: root.manager.current = 'menu'
