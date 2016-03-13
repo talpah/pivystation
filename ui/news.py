@@ -7,7 +7,7 @@ from kivy.app import App
 from kivy.properties import StringProperty, Clock
 from kivy.uix.label import Label
 
-from main import PROJECT_PATH
+from libs import PROJECT_PATH
 
 
 class NewsWidget(Label):

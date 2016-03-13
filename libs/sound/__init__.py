@@ -13,7 +13,7 @@ class MySoundGstplayer(SoundGstplayer):
 class MySoundLoader(SoundLoader):
     @staticmethod
     def load(filename):
-        """Load a sound, and return a Sound() instance."""
+        """Load a sound, and return a sound() instance."""
         rfn = resource_find(filename)
         if rfn is not None:
             filename = rfn

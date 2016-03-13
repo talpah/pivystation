@@ -4,9 +4,9 @@ from kivy.app import App
 from kivy.core.audio import SoundLoader
 from kivy.properties import StringProperty, ListProperty, Clock
 
-from libs.LabelB import LabelB
+from libs import PROJECT_PATH
 from libs.timer import Timer
-from main import PROJECT_PATH
+from libs.widgets.LabelB import LabelB
 
 
 class TimerWidget(LabelB):

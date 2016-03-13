@@ -3,19 +3,20 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
+import requests
 from collections import deque
+from threading import Thread
 
 import locale
-import os
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.properties import ObjectProperty
 from kivy.uix.screenmanager import ScreenManager, Screen
 
+from libs.remote import app
 # noinspection PyUnresolvedReferences
 from ui import *
 
-PROJECT_PATH = os.path.dirname(os.path.realpath(__file__))
 
 locale.setlocale(locale.LC_ALL, 'ro_RO.utf8')
 
@@ -61,6 +62,7 @@ class MainApp(App):
     screens = deque()
     screen_manager = ScreenManager()
     key_handler = None
+    remote_settings = {}
 
     def _key_right(self, *args):
         self.screens.rotate(1)
@@ -73,6 +75,7 @@ class MainApp(App):
         self.screen_manager.current = self.screens[0]
 
     def build_config(self, config):
+        config.setdefaults('remote', {'host': '0.0.0.0', 'port': 5000, 'debug': False})
         config.setdefaults('news', {'cycle_interval': 15, 'provider': 'mediafax'})
         config.setdefaults('radio', {'play_on_start': 'no',
                                      'streams': "\nhttp://astreaming.europafm.ro:8000/europafm_aacp48k#aac"
@@ -101,7 +104,18 @@ class MainApp(App):
         for key in keys:
             self.key_handler.bind(key[0], key[1])
 
+        self.remote_settings = {
+            'host': self.config.get('remote', 'host'),
+            'port': self.config.getint('remote', 'port'),
+            'debug': self.config.getboolean('remote', 'debug'),
+        }
+
+        Thread(target=lambda: app.run(**self.remote_settings)).start()
+
         return self.screen_manager
+
+    def on_stop(self):
+        requests.get('http://{host}:{port}/shutdown'.format(**self.remote_settings))
 
 
 if __name__ == '__main__':

@@ -9,7 +9,7 @@ from kivy.app import App
 from kivy.properties import StringProperty, Clock
 from kivy.uix.boxlayout import BoxLayout
 
-from main import PROJECT_PATH
+from libs import PROJECT_PATH
 
 
 class WeatherWidget(BoxLayout):

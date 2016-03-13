@@ -5,7 +5,7 @@ from kivy.app import App
 from kivy.properties import StringProperty
 from kivy.uix.boxlayout import BoxLayout
 
-from libs.Sound import MySoundLoader
+from libs.sound import MySoundLoader
 
 
 class RadioWidget(BoxLayout):
