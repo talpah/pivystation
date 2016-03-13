@@ -10,13 +10,12 @@ from threading import Thread
 import locale
 from kivy.app import App
 from kivy.core.window import Window
-from kivy.properties import ObjectProperty
+from kivy.properties import ObjectProperty, Logger
 from kivy.uix.screenmanager import ScreenManager, Screen
 
-from libs.remote import app
+from libs.remote import start_server
 # noinspection PyUnresolvedReferences
 from ui import *
-
 
 locale.setlocale(locale.LC_ALL, 'ro_RO.utf8')
 
@@ -110,12 +109,16 @@ class MainApp(App):
             'debug': self.config.getboolean('remote', 'debug'),
         }
 
-        Thread(target=lambda: app.run(**self.remote_settings)).start()
+        Thread(target=start_server, args=(self.remote_settings, Logger)).start()
 
         return self.screen_manager
 
     def on_stop(self):
-        requests.get('http://{host}:{port}/shutdown'.format(**self.remote_settings))
+        try:
+            Logger.info('Remote: Shutting down')
+            requests.get('http://{host}:{port}/shutdown'.format(**self.remote_settings))
+        except Exception, e:
+            Logger.warning('Remote: Shutdown failed:  %s' % e.message)
 
 
 if __name__ == '__main__':
