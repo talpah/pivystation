@@ -12,14 +12,24 @@
             TimerWidget:
         NewsWidget:
 
-<ForecastScreen>:
-    BoxLayout:
-        Button:
-            text: 'My settings button'
-        Button:
-            text: 'Back to menu'
-            on_press: root.manager.current = 'menu'
+<SaverScreen>:
+    saver: saver_widget
+    SaverWidget:
+        id: saver_widget
 
+<SaverWidget>:
+    flying: flying_widget
+    FlyingWidget:
+        id: flying_widget
+        center: root.center
+
+<FlyingWidget>:
+    pos: self.pos
+    size: 600, 500
+    orientation: 'vertical'
+    WeatherLiteWidget:
+    ClockWidget:
+    TimerWidget:
 
 <RadioWidget>:
     orientation: 'vertical'
@@ -44,81 +54,19 @@
             text_size: self.size
             halign: 'right'
             valign: 'middle'
-#    BoxLayout:
-#        orientation: 'vertical'
-#        BoxLayout:
-#            LabelB:
-#                bcolor: 0.184, 0.310, 0.310, 1
-#                text: '[ / ]'
-#                font_size: 36
-#                size_hint: 0, 0
-#                size: 70, 70
-#                padding: 10, 10
-#            Label:
-#                text: 'Pornit/Oprit'
-#                font_size: 36
-#                size_hint: 0, 0
-#                size: self.texture_size
-#                padding: 10, 10
-#            LabelB:
-#                bcolor: 0, 0, 0, 1
-#                text: ''
-#                font_size: 36
-#                size_hint: 0, 0
-#                size: 30, 30
-#            LabelB:
-#                bcolor: 0.184, 0.310, 0.310, 1
-#                text: '[ * ]'
-#                font_size: 36
-#                size_hint: 0, 0
-#                size: 70, 70
-#                padding: 10, 10
-#            Label:
-#                text: 'Urmatorul'
-#                font_size: 36
-#                size_hint: 0, 0
-#                size: self.texture_size
-#                padding: 10, 10
-#            LabelB:
-#                bcolor: 0, 0, 0, 1
-#                text: ''
-#                font_size: 36
-#                size_hint: 0, 0
-#                size: 30, 30
-#        BoxLayout:
-#            LabelB:
-#                bcolor: 0.184, 0.310, 0.310, 1
-#                text: '[ - ]'
-#                font_size: 36
-#                size_hint: 0, 0
-#                size: 70, 70
-#                padding: 10, 10
-#            Label:
-#                text: 'Volum -'
-#                font_size: 36
-#                size_hint: 0, 0
-#                size: self.texture_size
-#                padding: 10, 10
-#            LabelB:
-#                bcolor: 0, 0, 0, 1
-#                text: ''
-#                font_size: 36
-#                size_hint: 0, 0
-#                size: 30, 30
-#            LabelB:
-#                bcolor: 0.184, 0.310, 0.310, 1
-#                text: '[ + ]'
-#                font_size: 36
-#                size_hint: 0, 0
-#                size: 70, 70
-#                padding: 10, 10
-#            Label:
-#                text: 'Volum +'
-#                font_size: 36
-#                size_hint: 0, 0
-#                size: self.texture_size
-#                padding: 10, 10
 
+<WeatherLiteWidget>:
+    size_hint: 1, .2
+    size: 600, 30
+    Label:
+        size_hint: 0,0
+        size: 600, 30
+        id: 'shortstatus'
+        text: root.shortstatus
+        font_size: 36
+        halign: 'center'
+        valign: 'bottom'
+        color: 1.000, 0.980, 0.804, 1
 
 <WeatherWidget>:
     orientation: 'vertical'
@@ -171,7 +119,9 @@
     font_size: 40
 
 <ClockWidget>:
+    size: 500, 160
     Label:
+        size: 500, 30
         id: 'datetext'
         text: root.date_text
         font_size: 48

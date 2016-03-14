@@ -1,0 +1,10 @@
+<FlyingWidget>:
+    text: 'Vremea'
+    pos: self.pos
+    size: self.size
+
+<CanvasWidget>:
+    flying: flying_widget
+    FlyingWidget:
+        id: flying_widget
+        center: self.parent.center

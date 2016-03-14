@@ -5,13 +5,17 @@ from __future__ import print_function
 
 import requests
 from collections import deque
+from random import randint
 from threading import Thread
 
 import locale
 from kivy.app import App
 from kivy.core.window import Window
-from kivy.properties import ObjectProperty, Logger
+from kivy.properties import ObjectProperty, Logger, ReferenceListProperty, NumericProperty, Clock
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.widget import Widget
+from kivy.vector import Vector
 
 from libs import remotable_widget_map
 from libs.remote import start_server
@@ -55,8 +59,40 @@ class MainScreen(Screen):
         self.key_handler = kwargs['key_handler']
 
 
-class ForecastScreen(Screen):
-    pass
+class FlyingWidget(BoxLayout):
+    velocity_x = NumericProperty(0)
+    velocity_y = NumericProperty(0)
+    velocity = ReferenceListProperty(velocity_x, velocity_y)
+
+    def move(self):
+        self.pos = Vector(*self.velocity) + self.pos
+
+
+class SaverScreen(Screen):
+    saver = ObjectProperty(None)
+
+    def __init__(self, **kwargs):
+        super(SaverScreen, self).__init__(**kwargs)
+        self.saver.init_flying()
+        Clock.schedule_interval(self.saver.update, 1.0 / 30.0)
+
+
+class SaverWidget(Widget):
+    flying = ObjectProperty(None)
+
+    def init_flying(self):
+        self.flying.right = 800
+        self.flying.velocity = Vector(4, 0).rotate(randint(0, 360))
+
+    def update(self, dt):
+        self.flying.move()
+        # bounce off top and bottom
+        if (self.flying.y < 0) or (self.flying.top > self.height):
+            self.flying.velocity_y *= -1
+
+        # bounce off left and right
+        if (self.flying.x < 0) or (self.flying.right > self.width):
+            self.flying.velocity_x *= -1
 
 
 class MainApp(App):
@@ -89,7 +125,7 @@ class MainApp(App):
     def build(self):
         screens = [
             ('main', MainScreen),
-            ('forecast', ForecastScreen)
+            ('saver', SaverScreen)
         ]
         keys = [
             ('q', self.stop),
@@ -99,7 +135,8 @@ class MainApp(App):
         self.key_handler = KeyHandler(self.screen_manager)
 
         for screen in screens:
-            self.screen_manager.add_widget(screen[1](name=screen[0], key_handler=self.key_handler))
+            screen_object = screen[1](name=screen[0], key_handler=self.key_handler)
+            self.screen_manager.add_widget(screen_object)
             self.screens.append(screen[0])
 
         for key in keys:
