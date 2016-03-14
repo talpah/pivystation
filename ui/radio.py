@@ -9,6 +9,7 @@ from libs.sound import MySoundLoader
 
 
 class RadioWidget(BoxLayout):
+    can_remote = True
     radio_label = StringProperty()
     play_status = StringProperty()
     volume_value = StringProperty()

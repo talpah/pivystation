@@ -14,12 +14,14 @@ app = Flask(__name__, static_folder=static_folder, template_folder=template_fold
 # Import controllers
 # noinspection PyUnresolvedReferences
 import libs.remote.index
+import libs.remote.radio
 import libs.remote.shutdown
 
 
 def start_server(settings, logger):
     try:
         logger.info('Remote: Starting on {host}:{port}'.format(**settings))
+        app.logger.addHandler(logger)
         app.run(**settings)
     except Exception, e:
         logger.warning('Remote: Start failed:  %s' % str(e))

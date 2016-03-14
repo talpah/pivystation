@@ -6,6 +6,8 @@ from kivy.uix.boxlayout import BoxLayout
 
 
 class ClockWidget(BoxLayout):
+    can_remote = True
+
     orientation = 'vertical'
 
     date_text = StringProperty()

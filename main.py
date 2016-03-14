@@ -13,7 +13,9 @@ from kivy.core.window import Window
 from kivy.properties import ObjectProperty, Logger
 from kivy.uix.screenmanager import ScreenManager, Screen
 
+from libs import remotable_widget_map
 from libs.remote import start_server
+
 # noinspection PyUnresolvedReferences
 from ui import *
 
@@ -108,6 +110,8 @@ class MainApp(App):
             'port': self.config.getint('remote', 'port'),
             'debug': self.config.getboolean('remote', 'debug'),
         }
+
+        print(remotable_widget_map(self.screen_manager))
 
         Thread(target=start_server, args=(self.remote_settings, Logger)).start()
 

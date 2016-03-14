@@ -11,6 +11,8 @@ from libs import PROJECT_PATH
 
 
 class NewsWidget(Label):
+    can_remote = True
+
     news_items = StringProperty()
     news_rotation_paused = False
     news_rotation_manual_update = datetime.now()

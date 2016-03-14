@@ -13,6 +13,8 @@ from libs import PROJECT_PATH
 
 
 class WeatherWidget(BoxLayout):
+    can_remote = True
+
     location_label = StringProperty()
     temperature_label = StringProperty()
     temperatureminmax_label = StringProperty()

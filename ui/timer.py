@@ -10,6 +10,8 @@ from libs.widgets.LabelB import LabelB
 
 
 class TimerWidget(LabelB):
+    can_remote = True
+
     timer_text = StringProperty()
     timer_color = ListProperty()
     timer_bgcolor = ListProperty()

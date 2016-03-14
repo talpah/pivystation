@@ -51,8 +51,10 @@
             <ul class="nav navbar-nav">
                 <li {% if request.url_rule.endpoint == "index" %}class="active"{% endif %}>
                     <a href="{{ url_for('index') }}">Home</a></li>
-{#                <li>#}
-{#                    <a href="{{ url_for('shutdown') }}">Shutdown</a></li>#}
+                <li {% if request.url_rule.endpoint == "radio" %}class="active"{% endif %}>
+                    <a href="{{ url_for('radio') }}">Radio</a></li>
+                {#                <li>#}
+                {#                    <a href="{{ url_for('shutdown') }}">Shutdown</a></li>#}
             </ul>
             <form class="navbar-form navbar-right">
                 <input type="text" class="form-control" placeholder="Search...">
