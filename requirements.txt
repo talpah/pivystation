@@ -1,7 +1,5 @@
 flask
 DictObject
-Cython
-Kivy
 pyowm
 babel
 feedparser

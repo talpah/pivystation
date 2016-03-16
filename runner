@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+ME=$(dirname $(readlink -f "$0"))
+VENV="${ME}/env/bin/python"
+if test -e ${VENV}; then
+    ${VENV} $@
+else
+    /usr/bin/env python $@
+fi
