@@ -1,3 +1,18 @@
+# Requirements Setup
+
+## Debian/Ubuntu based systems:
+
+- `make setup-in-venv` for virtualenv install
+- `make setup` for system wide packages install
+
+## Other
+
+[Kivy installation docs](https://kivy.org/docs/installation/installation.html)
+
+then
+
+`pip install -r requirements.txt`
+
 # Keys
 
 - <kbd>q</kbd> Quit
