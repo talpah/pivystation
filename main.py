@@ -158,7 +158,7 @@ class MainApp(App):
         try:
             Logger.info('Remote: Shutting down')
             requests.get('http://{host}:{port}/shutdown'.format(**self.remote_settings))
-        except Exception, e:
+        except Exception as e:
             Logger.warning('Remote: Shutdown failed:  %s' % e.message)
 
 

@@ -22,8 +22,7 @@ class NewsWidget(Label):
         self.app = App.get_running_app()
         app_config = self.app.config
         provider = app_config.get('news', 'provider')
-        news_module = imp.load_source(provider,
-                                      os.path.join(PROJECT_PATH, 'libs', "news", "%s.py" % provider))
+        news_module = imp.load_source(provider, os.path.join(PROJECT_PATH, 'libs', "news", "%s.py" % provider))
         self.news_provider = news_module.News()
         Clock.schedule_interval(self.update_news, 600)
         Clock.schedule_interval(self.rotate_news, app_config.getint('news', 'cycle_interval'))

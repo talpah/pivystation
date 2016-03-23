@@ -4,20 +4,27 @@ from datetime import datetime, timedelta
 import feedparser
 import locale
 from babel.dates import format_timedelta
+from kivy import Logger
 
 
 class News(object):
     def __init__(self):
         self.feed_url = 'http://www.mediafax.ro/rss/'
-        self.is_paused = False
-        self.news = {}
+        self.news = {'items': []}
         self.articles = deque()
 
     def update(self):
         self.news = feedparser.parse(self.feed_url)
+
         article_list = []
+
         xlocale = locale.getlocale(locale.LC_TIME)
         locale.setlocale(locale.LC_TIME, 'en_US.utf-8')
+
+        if not self.news['items']:
+            Logger.error('NEWS: Seems there\'s no news')
+            return # Return here so we keep old news (if any)
+
         for x in self.news['items']:
             description = unicode(x['description']).strip()
             description = description.split('<', 1)[0].strip()
@@ -38,13 +45,17 @@ class News(object):
 
     def get_next_article(self):
         self.shift_descriptions('next')
-        description = self.articles[0]
-        return description
+        try:
+            return self.articles[0]
+        except IndexError:
+            return ''
 
     def get_prev_article(self):
         self.shift_descriptions('prev')
-        description = self.articles[0]
-        return description
+        try:
+            return self.articles[0]
+        except:
+            return ''
 
     def shift_descriptions(self, direction='next'):
         if direction == 'next':

@@ -36,20 +36,20 @@
     Label:
         id: 'radiolabel'
         text: root.radio_label
-        font_size: 48
+        font_size: '48sp'
         color: 1.000, 0.412, 0.706, 1
         text_size: root.width, None
         size: self.texture_size
         valign: 'top'
     BoxLayout:
         Label:
-            font_size: 36
+            font_size: '36sp'
             text: root.play_status
             text_size: self.size
             halign: 'left'
             valign: 'middle'
         Label:
-            font_size: 36
+            font_size: '36sp'
             text: root.volume_value
             text_size: self.size
             halign: 'right'
@@ -63,7 +63,7 @@
         size: 600, 30
         id: 'shortstatus'
         text: root.shortstatus
-        font_size: 36
+        font_size: '36sp'
         halign: 'center'
         valign: 'bottom'
         color: 1.000, 0.980, 0.804, 1
@@ -73,7 +73,7 @@
     Label:
         id: 'locationlabel'
         text: root.location_label
-        font_size: 48
+        font_size: '48sp'
         color: 1.000, 0.980, 0.804, 1
         valign: 'top'
     BoxLayout:
@@ -87,24 +87,24 @@
             Label:
                 id: 'temperaturelabel'
                 text: root.temperature_label
-                font_size: 96
+                font_size: '96sp'
                 color: 1.000, 0.980, 0.804, 1
             Label:
                 id: 'temperatureminmaxlabel'
                 text: root.temperatureminmax_label
-                font_size: 36
+                font_size: '36sp'
                 color: 0.8, 0.8, 0.8, 1
     Label:
         id: 'weatherupdatedlabel'
         text: root.weatherupdated_label
-        font_size: 32
+        font_size: '32sp'
         color: 0.5, 0.5, 0.5, 1
         valign: 'top'
 
 <TimerWidget>:
     id: 'timertext'
     text: root.timer_text
-    font_size: 120
+    font_size: '120sp'
     color: root.timer_color
     bcolor: root.timer_bgcolor
     valign: 'top'
@@ -116,7 +116,7 @@
     valign: 'top'
     markup: True
     text: root.news_items
-    font_size: 40
+    font_size: '40sp'
 
 <ClockWidget>:
     size: 500, 160
@@ -124,12 +124,12 @@
         size: 500, 30
         id: 'datetext'
         text: root.date_text
-        font_size: 48
+        font_size: '48sp'
         color: 1.000, 0.980, 0.804, 1
         valign: 'top'
     Label:
         id: 'clocktext'
         text: root.clock_text
-        font_size: 120
+        font_size: '120sp'
         color: 1.000, 0.980, 0.804, 1
         valign: 'top'
