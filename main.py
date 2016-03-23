@@ -181,7 +181,10 @@ class MainApp(App):
                                     'morning_start': 6,
                                     'morning_end': 9,
                                     })
-        config.setdefaults('remote', {'host': '0.0.0.0', 'port': 5000, 'debug': False})
+        config.setdefaults('remote', {'enabled': 'no',
+                                      'host': '0.0.0.0',
+                                      'port': 5000,
+                                      'debug': False})
         config.setdefaults('news', {'cycle_interval': 15, 'provider': 'mediafax'})
         config.setdefaults('radio', {'play_on_start': 'no',
                                      'streams': "\nhttp://astreaming.europafm.ro:8000/europafm_aacp48k#Europa FM#aac"
@@ -212,26 +215,28 @@ class MainApp(App):
         for key in keys:
             self.key_handler.bind(key[0], key[1])
 
-        self.remote_settings = {
-            'host': self.config.get('remote', 'host'),
-            'port': self.config.getint('remote', 'port'),
-            'debug': self.config.getboolean('remote', 'debug'),
-        }
+        if self.config.get('remote', 'enabled').lower() in ['yes', 'y', '1']:
+            self.remote_settings = {
+                'host': self.config.get('remote', 'host'),
+                'port': self.config.getint('remote', 'port'),
+                'debug': self.config.getboolean('remote', 'debug'),
+            }
+
+            print(remotable_widget_map(self.screen_manager))
+
+            Thread(target=start_server, args=(self.remote_settings, Logger)).start()
 
         self._reset_screensaver()
-
-        print(remotable_widget_map(self.screen_manager))
-
-        Thread(target=start_server, args=(self.remote_settings, Logger)).start()
 
         return self.screen_manager
 
     def on_stop(self):
-        try:
-            Logger.info('Remote: Shutting down')
-            requests.get('http://{host}:{port}/shutdown'.format(**self.remote_settings))
-        except Exception as e:
-            Logger.warning('Remote: Shutdown failed:  %s' % e.message)
+        if self.config.get('remote', 'enabled').lower() in ['yes', 'y', '1']:
+            try:
+                Logger.info('Remote: Shutting down')
+                requests.get('http://{host}:{port}/shutdown'.format(**self.remote_settings))
+            except Exception as e:
+                Logger.warning('Remote: Shutdown failed:  %s' % e.message)
 
 
 if __name__ == '__main__':
