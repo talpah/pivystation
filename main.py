@@ -47,7 +47,7 @@ class KeyHandler(object):
         key = keycode[1]  # Textual representation of key
 
         if callable(self.key_down_callback):
-            self.key_down_callback(key)
+            self.key_down_callback(key=key)
 
         if key in self._callbacks:
             for cb in self._callbacks[key]:
@@ -119,10 +119,14 @@ class MainApp(App):
         self.screen_manager.current = self.screens[0]
 
     def _start_screensaver(self, *args):
-        self.screen_manager.current = self.saver_screen
+        while self.screen_manager.current != self.saver_screen:
+            self._key_left()
 
-    def _reset_screensaver(self, *args):
-        self.screen_manager.current = self.default_screen
+    def _reset_screensaver(self, *args, **kwargs):
+        # Change screen only of key is not left/right (what we use to navigate screens)
+        if 'key' not in kwargs or kwargs['key'] not in ['right', 'left']:
+            while self.screen_manager.current != self.default_screen:
+                self._key_right()
         if self.saver_scheduler:
             self.saver_scheduler.cancel()
         self.saver_scheduler = Clock.schedule_once(self._start_screensaver,
