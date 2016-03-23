@@ -66,8 +66,34 @@ class Weather(object):
     def tomorrow(self):
         pass
 
-    def today(self):
-        pass
+    def today(self, place):
+        if not self.refresh(place):
+            return {
+                'place': place,
+                'conditions': 'EROARE',
+                'icon': '01d',
+                'wind': '-',
+                'humidity': '',  # 87
+                'temperature': 0,
+                'temperature_min': 0,
+                'temperature_max': 0
+            }
+        wind = self.forecast_data[place].get_wind()  # {'speed': 4.6, 'deg': 330}
+        temperature_today = self.forecast_data[place].get_temperature(self.config.temperature_unit)
+        conditions = self.forecast_data[place].get_detailed_status()
+        icon = self.forecast_data[place].get_weather_icon_name()
+
+        response = {
+            'place': place,
+            'conditions': conditions,
+            'icon': icon,
+            'wind': self._convert_speed_from_mps(wind['speed'], self.config.wind_speed_unit),
+            'humidity': self.forecast_data[place].get_humidity(),  # 87
+            'temperature': temperature_today['day'],
+            'temperature_min': temperature_today['min'],
+            'temperature_max': temperature_today['max']
+        }
+        return response
 
     def _convert_speed_from_mps(self, speed, unit):
         if unit == 'kph':

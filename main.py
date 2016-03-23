@@ -9,6 +9,8 @@ from random import randint
 from threading import Thread
 
 import locale
+
+from datetime import datetime
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.properties import ObjectProperty, Logger, ReferenceListProperty, NumericProperty, Clock
@@ -80,7 +82,6 @@ class SaverScreen(Screen):
         super(SaverScreen, self).__init__(**kwargs)
         self.saver.init_flying()
 
-
     def on_enter(self, *args):
         self.animation_scheduler = Clock.schedule_interval(self.saver.update, 1.0 / 30.0)
 
@@ -106,14 +107,40 @@ class SaverWidget(Widget):
             self.flying.velocity_x *= -1
 
 
+class MorningScreen(Screen):
+    app = None
+    morning_checker = None
+    morning_start_hour = 6
+    morning_end_hour = 9
+
+    def __init__(self, **kwargs):
+        super(MorningScreen, self).__init__(**kwargs)
+        self.app = App.get_running_app()
+        self.morning_start_hour = self.app.config.getint('main', 'morning_start')
+        self.morning_end_hour = self.app.config.getint('main', 'morning_end')
+        self.morning_checker = Clock.schedule_interval(self.is_it_morning, 1)
+
+    def is_it_morning(self, *args):
+        if self.morning_start_hour <= datetime.now().hour < self.morning_end_hour:
+            if not self.app.is_it_morning:
+                self.app.screen_manager.current = self.app.morning_screen
+            self.app.is_it_morning = True
+        else:
+            if self.app.is_it_morning:
+                self.app.screen_manager.current = self.app.default_screen
+            self.app.is_it_morning = False
+
+
 class MainApp(App):
     screens = deque()
     screen_manager = ScreenManager()
     key_handler = None
     remote_settings = {}
     default_screen = 'main'
+    morning_screen = 'morning'
     saver_screen = 'saver'
     saver_scheduler = None
+    is_it_morning = False
 
     def _key_right(self, *args):
         self.screens.rotate(1)
@@ -126,22 +153,34 @@ class MainApp(App):
         self.screen_manager.current = self.screens[0]
 
     def _start_screensaver(self, *args):
-        while self.screen_manager.current != self.saver_screen:
-            self._key_left()
+        if self._screensaver_can_run():
+            while self.screen_manager.current != self.saver_screen:
+                self._key_right()
+
+    def _screensaver_enabled(self):
+        return self.config.get('main', 'screensaver_enabled').lower() in ['true', 'yes', 'y', '1']
+
+    def _screensaver_can_run(self):
+        return not self.is_it_morning
 
     def _reset_screensaver(self, *args, **kwargs):
         # Change screen only of key is not left/right (what we use to navigate screens)
-        if 'key' not in kwargs or kwargs['key'] not in ['right', 'left']:
+        if self.screen_manager.current == self.saver_screen and (
+                        'key' not in kwargs or kwargs['key'] not in ['right', 'left']):
             while self.screen_manager.current != self.default_screen:
-                self._key_right()
+                self._key_left()
         if self.saver_scheduler:
             self.saver_scheduler.cancel()
-        if self.config.get('main', 'screensaver_enabled').lower() in ['true', 'yes', 'y', '1']:
+        if self._screensaver_can_run():
             self.saver_scheduler = Clock.schedule_once(self._start_screensaver,
                                                        float(self.config.get('main', 'screensaver_timeout')))
 
     def build_config(self, config):
-        config.setdefaults('main', {'screensaver_enabled': 'yes', 'screensaver_timeout': 60 * 15})
+        config.setdefaults('main', {'screensaver_enabled': 'yes',
+                                    'screensaver_timeout': 60 * 15,
+                                    'morning_start': 6,
+                                    'morning_end': 9,
+                                    })
         config.setdefaults('remote', {'host': '0.0.0.0', 'port': 5000, 'debug': False})
         config.setdefaults('news', {'cycle_interval': 15, 'provider': 'mediafax'})
         config.setdefaults('radio', {'play_on_start': 'no',
@@ -155,6 +194,7 @@ class MainApp(App):
     def build(self):
         screens = [
             ('main', MainScreen),
+            ('morning', MorningScreen),
             ('saver', SaverScreen)
         ]
         keys = [

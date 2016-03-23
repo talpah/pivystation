@@ -12,6 +12,19 @@
             TimerWidget:
         NewsWidget:
 
+<MorningScreen>:
+    SimpleTableLayout:
+        rows: 2
+        cols: 3
+        WeatherWidget:
+        RadioWidget:
+        BoxLayout:
+            orientation: 'vertical'
+            ClockWidget:
+            TimerWidget:
+        ForecastWidget:
+            colspan: 3
+
 <SaverScreen>:
     saver: saver_widget
     SaverWidget:
@@ -67,6 +80,41 @@
         halign: 'center'
         valign: 'bottom'
         color: 1.000, 0.980, 0.804, 1
+
+<ForecastWidget>:
+    Image:
+        source: root.weathericon_source
+        allow_stretch: True
+        size_hint: 1, 1.5
+        pos_hint: {'center_y': 0.5}
+        size: 300, 300
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            id: 'locationlabel'
+            text: root.location_label
+            font_size: '96sp'
+            color: 1.000, 0.980, 0.804, 1
+        BoxLayout:
+            Label:
+                text: 'Temperatura maximă:'
+                font_size: '48sp'
+                color: 1.000, 0.980, 0.804, 1
+            Label:
+                id: 'temperature_max_label'
+                text: root.temperature_max_label
+                font_size: '48sp'
+                color: 1.000, 0.980, 0.804, 1
+        BoxLayout:
+            Label:
+                text: 'Temperatura minimă:'
+                font_size: '48sp'
+                color: 1.000, 0.980, 0.804, 1
+            Label:
+                id: 'temperature_min_label'
+                text: root.temperature_min_label
+                font_size: '48sp'
+                color: 1.000, 0.980, 0.804, 1
 
 <WeatherWidget>:
     orientation: 'vertical'

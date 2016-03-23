@@ -40,7 +40,7 @@ class WeatherWidget(BoxLayout):
         place = self.weather_config.default_place
         weather_data = self.weather_provider.now(place)
         self.weathericon_source = u"libs/weather/icons/{}.png".format(weather_data['icon'])
-        self.location_label = u"{} - {}".format(weather_data['place'], weather_data['conditions'])
+        self.location_label = u"{} acum: {}".format(weather_data['place'], weather_data['conditions'])
         self.temperature_label = u"{:.2g} ° C".format(weather_data['temperature'])
         self.temperatureminmax_label = u"{:.2g} / {:.2g}".format(weather_data['temperature_min'],
                                                                  weather_data['temperature_max'])
@@ -49,6 +49,38 @@ class WeatherWidget(BoxLayout):
                                         locale='ro_RO.utf-8',
                                         add_direction=True)
         self.weatherupdated_label = u"Actualizat {}".format(last_updated)
+
+
+class ForecastWidget(BoxLayout):
+    can_remote = False
+
+    location_label = StringProperty()
+    temperature_max_label = StringProperty()
+    temperature_min_label = StringProperty()
+    weathericon_source = StringProperty()
+    weatherupdated_label = StringProperty()
+    weather_provider = None
+
+    def __init__(self, **kwargs):
+        super(ForecastWidget, self).__init__(**kwargs)
+
+        self.app = App.get_running_app()
+        dict_config = dict(self.app.config.items('weather'))
+        self.weather_config = DictObject(dict_config)
+        weather_module = imp.load_source(self.weather_config.provider,
+                                         os.path.join(PROJECT_PATH, 'libs', "weather",
+                                                      "%s.py" % self.weather_config.provider))
+
+        self.weather_provider = weather_module.Weather(self.weather_config)
+        self.update_weather()
+
+    def update_weather(self, *args):
+        place = self.weather_config.default_place
+        weather_data = self.weather_provider.today(place)
+        self.weathericon_source = u"libs/weather/icons/{}.png".format(weather_data['icon'])
+        self.location_label = u"{} astăzi: {}".format(weather_data['place'], weather_data['conditions'])
+        self.temperature_max_label = u"{:.2g} ° C".format(weather_data['temperature_max'])
+        self.temperature_min_label = u"{:.2g} ° C".format(weather_data['temperature_min'])
 
 
 class WeatherLiteWidget(BoxLayout):
