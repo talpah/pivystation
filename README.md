@@ -5,7 +5,7 @@
 - `make setup-in-venv` for virtualenv install
 - `make setup` for system wide packages install
 
-## Other
+## Other systems
 
 [Kivy installation docs](https://kivy.org/docs/installation/installation.html)
 
