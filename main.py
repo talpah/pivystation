@@ -118,7 +118,7 @@ class MorningScreen(Screen):
         self.app = App.get_running_app()
         self.morning_start_hour = self.app.config.getint('main', 'morning_start')
         self.morning_end_hour = self.app.config.getint('main', 'morning_end')
-        self.morning_checker = Clock.schedule_interval(self.is_it_morning, 1)
+        self.morning_checker = Clock.schedule_interval(self.is_it_morning, 5)
 
     def is_it_morning(self, *args):
         if self.morning_start_hour <= datetime.now().hour < self.morning_end_hour:
@@ -171,7 +171,7 @@ class MainApp(App):
                 self._key_left()
         if self.saver_scheduler:
             self.saver_scheduler.cancel()
-        if self._screensaver_can_run():
+        if self._screensaver_enabled():
             self.saver_scheduler = Clock.schedule_once(self._start_screensaver,
                                                        float(self.config.get('main', 'screensaver_timeout')))
 
