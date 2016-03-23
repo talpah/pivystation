@@ -85,7 +85,7 @@
     Image:
         source: root.weathericon_source
         allow_stretch: True
-        size_hint: 1, 1.5
+        size_hint: 0.5, 1
         pos_hint: {'center_y': 0.5}
         size: 300, 300
     BoxLayout:
@@ -93,11 +93,11 @@
         Label:
             id: 'locationlabel'
             text: root.location_label
-            font_size: '96sp'
+            font_size: '48sp'
             color: 1.000, 0.980, 0.804, 1
         BoxLayout:
             Label:
-                text: 'Temperatura maximă:'
+                text: 'Maximă:'
                 font_size: '48sp'
                 color: 1.000, 0.980, 0.804, 1
             Label:
@@ -107,7 +107,7 @@
                 color: 1.000, 0.980, 0.804, 1
         BoxLayout:
             Label:
-                text: 'Temperatura minimă:'
+                text: 'Minimă:'
                 font_size: '48sp'
                 color: 1.000, 0.980, 0.804, 1
             Label:
