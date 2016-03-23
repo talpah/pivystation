@@ -74,11 +74,18 @@ class FlyingWidget(BoxLayout):
 
 class SaverScreen(Screen):
     saver = ObjectProperty(None)
+    animation_scheduler = None
 
     def __init__(self, **kwargs):
         super(SaverScreen, self).__init__(**kwargs)
         self.saver.init_flying()
-        Clock.schedule_interval(self.saver.update, 1.0 / 30.0)
+
+
+    def on_enter(self, *args):
+        self.animation_scheduler = Clock.schedule_interval(self.saver.update, 1.0 / 30.0)
+
+    def on_leave(self, *args):
+        self.animation_scheduler.cancel()
 
 
 class SaverWidget(Widget):
