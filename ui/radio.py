@@ -25,7 +25,7 @@ class RadioWidget(BoxLayout):
         streams = [s for s in self.config.get('radio', 'streams').split("\n") if s]
         self.stream_list = deque(streams)
         self.radio_label = ''
-        self.play_status = 'Oprit'
+        self.play_status = 'Radio: Oprit'
         self.volume_value = 'Volum 100%'
 
         self.app.key_handler.bind('numpaddivide', self.playpause)
@@ -69,16 +69,16 @@ class RadioWidget(BoxLayout):
             self.current_stream.play()
             Logger.info("Radio: playing %s" % self.stream_list[0])
             self.is_playing = True
-            self.play_status = 'Pornit'
+            self.play_status = 'Radio: Pornit'
         except Exception as e:
-            self.play_status = 'Eroare'
+            self.play_status = 'Radio: Eroare'
             Logger.error('Radio: Failed to play stream: {}'.format(e.message))
 
     def stop(self, *args):
         Logger.info("Radio: stopping.")
         self.radio_label = ''
         self.is_playing = False
-        self.play_status = 'Oprit'
+        self.play_status = 'Radio: Oprit'
         self.current_stream.stop()
 
     def vol_up(self, *args):
