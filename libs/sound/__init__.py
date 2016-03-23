@@ -20,9 +20,15 @@ class MySoundLoader(SoundLoader):
 
         ext = filename.split('.')[-1].lower()
         if '#' in ext:
-            ext = ext.split('#')[-1].lower()
-        elif '?' in ext:
+            tryext = ext.split('#')[-1].lower()
+            if len(tryext)<=4:
+                ext = tryext
+            else:
+                ext = ext.split('#')[0]
+
+        if '?' in ext:
             ext = ext.split('?')[0]
+
         for classobj in SoundLoader._classes:
             if ext in classobj.extensions():
                 return classobj(source=filename)

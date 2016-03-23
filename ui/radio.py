@@ -22,8 +22,8 @@ class RadioWidget(BoxLayout):
         super(RadioWidget, self).__init__(**kwargs)
         self.app = App.get_running_app()
         self.config = self.app.config
-        streams = self.config.get('radio', 'streams')
-        self.stream_list = deque([s for s in streams.split("\n") if s])
+        streams = [s for s in self.config.get('radio', 'streams').split("\n") if s]
+        self.stream_list = deque(streams)
         self.radio_label = ''
         self.play_status = 'Oprit'
         self.volume_value = 'Volum 100%'
@@ -38,7 +38,8 @@ class RadioWidget(BoxLayout):
 
     def select_stream(self, url):
         self.current_stream = MySoundLoader.load(url)
-        self.current_stream.volume = self.current_volume
+        if self.current_stream:
+            self.current_stream.volume = self.current_volume
 
     def next_stream(self, *args):
         if self.current_stream:
@@ -56,15 +57,26 @@ class RadioWidget(BoxLayout):
     def play(self, *args):
         if not self.current_stream:
             self.select_stream(self.stream_list[0])
-        self.radio_label = self.stream_list[0]
-        Logger.info("Radio: playing %s" % self.stream_list[0])
-        self.is_playing = True
-        self.play_status = 'Pornit'
-        self.current_stream.play()
+        stream = self.stream_list[0].split('#')
+        if len(stream)>2:
+            label = stream[1]
+        elif len(stream)>1 and len(stream[1])>3:
+            label = stream[1]
+        else:
+            label = stream[0].split('/')[2]
+        self.radio_label = label
+        try:
+            self.current_stream.play()
+            Logger.info("Radio: playing %s" % self.stream_list[0])
+            self.is_playing = True
+            self.play_status = 'Pornit'
+        except Exception as e:
+            self.play_status = 'Eroare'
+            Logger.error('Radio: Failed to play stream: {}'.format(e.message))
 
     def stop(self, *args):
         Logger.info("Radio: stopping.")
-        self.radio_label = self.stream_list[0]
+        self.radio_label = ''
         self.is_playing = False
         self.play_status = 'Oprit'
         self.current_stream.stop()

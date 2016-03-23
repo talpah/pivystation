@@ -129,16 +129,17 @@ class MainApp(App):
                 self._key_right()
         if self.saver_scheduler:
             self.saver_scheduler.cancel()
-        self.saver_scheduler = Clock.schedule_once(self._start_screensaver,
-                                                   float(self.config.get('main', 'screensaver_timeout')))
+        if self.config.get('main', 'screensaver_enabled').lower() in ['true', 'yes', 'y', '1']:
+            self.saver_scheduler = Clock.schedule_once(self._start_screensaver,
+                                                       float(self.config.get('main', 'screensaver_timeout')))
 
     def build_config(self, config):
-        config.setdefaults('main', {'screensaver_timeout': 60 * 15})
+        config.setdefaults('main', {'screensaver_enabled': 'yes', 'screensaver_timeout': 60 * 15})
         config.setdefaults('remote', {'host': '0.0.0.0', 'port': 5000, 'debug': False})
         config.setdefaults('news', {'cycle_interval': 15, 'provider': 'mediafax'})
         config.setdefaults('radio', {'play_on_start': 'no',
-                                     'streams': "\nhttp://astreaming.europafm.ro:8000/europafm_aacp48k#aac"
-                                                "\nhttp://edge126.rdsnet.ro:84/profm/dancefm.mp3"})
+                                     'streams': "\nhttp://astreaming.europafm.ro:8000/europafm_aacp48k#Europa FM#aac"
+                                                "\nhttp://edge126.rdsnet.ro:84/profm/dancefm.mp3#Dance FM"})
         config.setdefaults('weather', {'temperature_unit_display': 'C', 'language': 'ro', 'temperature_unit': 'celsius',
                                        'provider': 'openweathermap', 'api_key': '1a6b3c983f34975e1634037a882c365a',
                                        'wind_speed_unit': 'kph', 'default_place': 'Bucuresti',
