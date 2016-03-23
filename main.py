@@ -29,9 +29,10 @@ locale.setlocale(locale.LC_ALL, 'ro_RO.utf8')
 class KeyHandler(object):
     _callbacks = {}
 
-    def __init__(self, target):
+    def __init__(self, target, key_down_callback=None):
         self._keyboard = Window.request_keyboard(self.keyboard_closed, target)
         self._keyboard.bind(on_key_down=self.on_keyboard_down)
+        self.key_down_callback = key_down_callback
 
     def keyboard_closed(self):
         self._keyboard.unbind(on_key_down=self.on_keyboard_down)
@@ -44,7 +45,10 @@ class KeyHandler(object):
 
     def on_keyboard_down(self, keyboard, keycode, text, modifiers):
         key = keycode[1]  # Textual representation of key
-        # print(key)
+
+        if callable(self.key_down_callback):
+            self.key_down_callback(key)
+
         if key in self._callbacks:
             for cb in self._callbacks[key]:
                 cb(key)
@@ -100,6 +104,9 @@ class MainApp(App):
     screen_manager = ScreenManager()
     key_handler = None
     remote_settings = {}
+    default_screen = 'main'
+    saver_screen = 'saver'
+    saver_scheduler = None
 
     def _key_right(self, *args):
         self.screens.rotate(1)
@@ -111,7 +118,18 @@ class MainApp(App):
         self.screen_manager.transition.direction = 'right'
         self.screen_manager.current = self.screens[0]
 
+    def _start_screensaver(self, *args):
+        self.screen_manager.current = self.saver_screen
+
+    def _reset_screensaver(self, *args):
+        self.screen_manager.current = self.default_screen
+        if self.saver_scheduler:
+            self.saver_scheduler.cancel()
+        self.saver_scheduler = Clock.schedule_once(self._start_screensaver,
+                                                   float(self.config.get('main', 'screensaver_timeout')))
+
     def build_config(self, config):
+        config.setdefaults('main', {'screensaver_timeout': 60 * 15})
         config.setdefaults('remote', {'host': '0.0.0.0', 'port': 5000, 'debug': False})
         config.setdefaults('news', {'cycle_interval': 15, 'provider': 'mediafax'})
         config.setdefaults('radio', {'play_on_start': 'no',
@@ -132,7 +150,7 @@ class MainApp(App):
             ('right', self._key_right),
             ('left', self._key_left)
         ]
-        self.key_handler = KeyHandler(self.screen_manager)
+        self.key_handler = KeyHandler(self.screen_manager, key_down_callback=self._reset_screensaver)
 
         for screen in screens:
             screen_object = screen[1](name=screen[0], key_handler=self.key_handler)
@@ -147,6 +165,8 @@ class MainApp(App):
             'port': self.config.getint('remote', 'port'),
             'debug': self.config.getboolean('remote', 'debug'),
         }
+
+        self._reset_screensaver()
 
         print(remotable_widget_map(self.screen_manager))
 
