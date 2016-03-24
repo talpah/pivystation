@@ -24,7 +24,7 @@ class Weather(object):
         if not place_cache or (now - last_updated).total_seconds() >= self.update_interval:
             try:
                 self.weather_data[place] = self.api_object.weather_at_place(place).get_weather()
-                self.forecast_data[place] = self.api_object.daily_forecast(place).get_weather_at(now)
+                self.forecast_data[place] = self.api_object.daily_forecast(place).get_weather_at(now.replace(hour=12))
                 self.update_stamps[place] = datetime.now()
             except APICallError as e:
                 self.update_stamps[place] = datetime.now()
