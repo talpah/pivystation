@@ -16,6 +16,7 @@ class TimerWidget(LabelB):
     timer_color = ListProperty()
     timer_bgcolor = ListProperty()
     alarm_odd = False
+    timer_updater = None
 
     def __init__(self, **kwargs):
         super(TimerWidget, self).__init__(**kwargs)
@@ -26,11 +27,17 @@ class TimerWidget(LabelB):
         for key in Timer.all_keys:
             self.app.key_handler.bind(key, self.timer_provider.key)
             self.app.key_handler.bind(key, self.update_timer)
-
-        Clock.schedule_interval(self.update_timer, 0.5)
+        self.update_timer()
         Clock.schedule_interval(self.timer_provider.countdown, 1)
 
     def update_timer(self, *args):
+        if self.timer_provider.is_active or self.timer_provider.is_editing:
+            if not self.timer_updater:
+                self.timer_updater = Clock.schedule_interval(self.update_timer, 0.5)
+        else:
+            if self.timer_updater:
+                self.timer_updater.cancel()
+                self.timer_updater = None
         self.timer_text = str(self.timer_provider)
         if self.timer_provider.is_alarmed:
             if self.alarm_odd:

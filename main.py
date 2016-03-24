@@ -109,7 +109,6 @@ class SaverWidget(Widget):
 
 class MorningScreen(Screen):
     app = None
-    morning_checker = None
     morning_start_hour = 6
     morning_end_hour = 9
 
@@ -118,7 +117,7 @@ class MorningScreen(Screen):
         self.app = App.get_running_app()
         self.morning_start_hour = self.app.config.getint('main', 'morning_start')
         self.morning_end_hour = self.app.config.getint('main', 'morning_end')
-        self.morning_checker = Clock.schedule_interval(self.is_it_morning, 5)
+        Clock.schedule_interval(self.is_it_morning, 5)
 
     def is_it_morning(self, *args):
         if self.morning_start_hour <= datetime.now().hour < self.morning_end_hour:
