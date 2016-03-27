@@ -4,7 +4,7 @@ from kivy.app import App
 from kivy.core.audio import SoundLoader
 from kivy.properties import StringProperty, ListProperty, Clock
 
-from libs import PROJECT_PATH
+from libs import PROJECT_PATH, Scheduler
 from libs.timer import Timer
 from libs.widgets.LabelB import LabelB
 
@@ -28,12 +28,12 @@ class TimerWidget(LabelB):
             self.app.key_handler.bind(key, self.timer_provider.key)
             self.app.key_handler.bind(key, self.update_timer)
         self.update_timer()
-        Clock.schedule_interval(self.timer_provider.countdown, 1)
+        Scheduler.add_callback(self.timer_provider.countdown)
+        Scheduler.add_callback(self.update_timer)
 
     def update_timer(self, *args):
         if self.timer_provider.is_active or self.timer_provider.is_editing:
-            if not self.timer_updater:
-                self.timer_updater = Clock.schedule_interval(self.update_timer, 0.5)
+            pass
         else:
             if self.timer_updater:
                 self.timer_updater.cancel()

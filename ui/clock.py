@@ -4,6 +4,7 @@ import time
 from kivy.properties import StringProperty, Clock
 from kivy.uix.boxlayout import BoxLayout
 
+from libs import Scheduler
 
 class ClockWidget(BoxLayout):
     can_remote = True
@@ -15,8 +16,7 @@ class ClockWidget(BoxLayout):
 
     def __init__(self, **kwargs):
         super(ClockWidget, self).__init__(**kwargs)
-        Clock.schedule_interval(self.update_clock, 1)
-
+        Scheduler.add_callback(self.update_clock)
         self.update_clock()
 
     def update_clock(self, *args):
