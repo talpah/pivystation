@@ -3,24 +3,18 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
-import requests
-from collections import deque
-from random import randint
-from threading import Thread
-
 import locale
-
+from collections import deque
 from datetime import datetime
+from random import randint
+
 from kivy.app import App
 from kivy.core.window import Window
-from kivy.properties import ObjectProperty, Logger, ReferenceListProperty, NumericProperty, Clock
+from kivy.properties import ObjectProperty, ReferenceListProperty, NumericProperty, Clock
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.widget import Widget
 from kivy.vector import Vector
-
-from libs import remotable_widget_map
-from libs.remote import start_server
 
 # noinspection PyUnresolvedReferences
 from ui import *
@@ -221,21 +215,9 @@ class MainApp(App):
                 'debug': self.config.getboolean('remote', 'debug'),
             }
 
-            print(remotable_widget_map(self.screen_manager))
-
-            Thread(target=start_server, args=(self.remote_settings, Logger)).start()
-
         self._reset_screensaver()
 
         return self.screen_manager
-
-    def on_stop(self):
-        if self.config.get('remote', 'enabled').lower() in ['yes', 'y', '1']:
-            try:
-                Logger.info('Remote: Shutting down')
-                requests.get('http://{host}:{port}/shutdown'.format(**self.remote_settings))
-            except Exception as e:
-                Logger.warning('Remote: Shutdown failed:  %s' % e.message)
 
 
 if __name__ == '__main__':
