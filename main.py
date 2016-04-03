@@ -5,7 +5,6 @@ from __future__ import print_function
 
 import locale
 from collections import deque
-from datetime import datetime
 from random import randint
 
 from kivy.app import App
@@ -101,36 +100,12 @@ class SaverWidget(Widget):
             self.flying.velocity_x *= -1
 
 
-class MorningScreen(Screen):
-    app = None
-    morning_start_hour = 6
-    morning_end_hour = 9
-
-    def __init__(self, **kwargs):
-        super(MorningScreen, self).__init__(**kwargs)
-        self.app = App.get_running_app()
-        self.morning_start_hour = self.app.config.getint('main', 'morning_start')
-        self.morning_end_hour = self.app.config.getint('main', 'morning_end')
-        Clock.schedule_interval(self.is_it_morning, 5)
-
-    def is_it_morning(self, *args):
-        if self.morning_start_hour <= datetime.now().hour < self.morning_end_hour:
-            if not self.app.is_it_morning:
-                self.app.screen_manager.current = self.app.morning_screen
-            self.app.is_it_morning = True
-        else:
-            if self.app.is_it_morning:
-                self.app.screen_manager.current = self.app.default_screen
-            self.app.is_it_morning = False
-
-
 class MainApp(App):
     screens = deque()
     screen_manager = ScreenManager()
     key_handler = None
     remote_settings = {}
     default_screen = 'main'
-    morning_screen = 'morning'
     saver_screen = 'saver'
     saver_scheduler = None
     is_it_morning = False
@@ -146,15 +121,11 @@ class MainApp(App):
         self.screen_manager.current = self.screens[0]
 
     def _start_screensaver(self, *args):
-        if self._screensaver_can_run():
-            while self.screen_manager.current != self.saver_screen:
-                self._key_right()
+        while self.screen_manager.current != self.saver_screen:
+            self._key_right()
 
     def _screensaver_enabled(self):
         return self.config.get('main', 'screensaver_enabled').lower() in ['true', 'yes', 'y', '1']
-
-    def _screensaver_can_run(self):
-        return not self.is_it_morning
 
     def _reset_screensaver(self, *args, **kwargs):
         # Change screen only of key is not left/right (what we use to navigate screens)
@@ -171,8 +142,6 @@ class MainApp(App):
     def build_config(self, config):
         config.setdefaults('main', {'screensaver_enabled': 'yes',
                                     'screensaver_timeout': 60 * 15,
-                                    'morning_start': 6,
-                                    'morning_end': 9,
                                     })
         config.setdefaults('remote', {'enabled': 'no',
                                       'host': '0.0.0.0',
@@ -190,7 +159,6 @@ class MainApp(App):
     def build(self):
         screens = [
             ('main', MainScreen),
-            ('morning', MorningScreen),
             ('saver', SaverScreen)
         ]
         keys = [

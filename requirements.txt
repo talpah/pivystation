@@ -3,3 +3,4 @@ DictObject
 pyowm
 babel
 feedparser
+kivy

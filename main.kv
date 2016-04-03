@@ -1,29 +1,19 @@
 #:import SimpleTableLayout libs.garden.simpletablelayout.SimpleTableLayout
 #:import LabelB libs.widgets.LabelB
 <MainScreen>:
-    SimpleTableLayout:
-        rows: 2
-        cols: 3
-        WeatherWidget:
-        RadioWidget:
-        BoxLayout:
-            orientation: 'vertical'
-            ClockWidget:
-            TimerWidget:
-        NewsWidget:
-
-<MorningScreen>:
-    SimpleTableLayout:
-        rows: 2
-        cols: 3
-        WeatherWidget:
-        RadioWidget:
-        BoxLayout:
-            orientation: 'vertical'
-            ClockWidget:
-            TimerWidget:
+    BoxLayout:
+        orientation: 'vertical'
+        SimpleTableLayout:
+            rows: 1
+            cols: 3
+            WeatherWidget:
+            RadioWidget:
+            BoxLayout:
+                orientation: 'vertical'
+                ClockWidget:
+                TimerWidget:
         ForecastWidget:
-            colspan: 3
+        NewsWidget:
 
 <SaverScreen>:
     saver: saver_widget
@@ -82,39 +72,43 @@
         color: 1.000, 0.980, 0.804, 1
 
 <ForecastWidget>:
+    size_hint: 1,0
+    size: 1, 50
+    Label:
+        text: 'Azi:'
+        font_size: '40sp'
+        color: 1.000, 0.580, 0.580, 1
     Image:
-        source: root.weathericon_source
+        source: root.today_weathericon_source
         allow_stretch: True
-        size_hint: 0.5, 1
+        size_hint: 1, 1.2
         pos_hint: {'center_y': 0.5}
-        size: 300, 300
-    BoxLayout:
-        orientation: 'vertical'
-        Label:
-            id: 'locationlabel'
-            text: root.location_label
-            font_size: '48sp'
-            color: 1.000, 0.980, 0.804, 1
-        BoxLayout:
-            Label:
-                text: 'Maximă:'
-                font_size: '48sp'
-                color: 1.000, 0.980, 0.804, 1
-            Label:
-                id: 'temperature_max_label'
-                text: root.temperature_max_label
-                font_size: '48sp'
-                color: 1.000, 0.980, 0.804, 1
-        BoxLayout:
-            Label:
-                text: 'Minimă:'
-                font_size: '48sp'
-                color: 1.000, 0.980, 0.804, 1
-            Label:
-                id: 'temperature_min_label'
-                text: root.temperature_min_label
-                font_size: '48sp'
-                color: 1.000, 0.980, 0.804, 1
+    Label:
+        text: root.today_temperature_max_label
+        font_size: '32sp'
+        color: 1.000, 0.980, 0.804, 1
+    Label:
+        text: root.today_conditions_label
+        font_size: '32sp'
+        color: 1.000, 0.980, 0.804, 1
+    Label:
+        text: 'Mâine:'
+        font_size: '40sp'
+        color: 1.000, 0.580, 0.580, 1
+    Image:
+        source: root.tomorrow_weathericon_source
+        allow_stretch: True
+        size_hint: 1, 1.2
+        pos_hint: {'center_y': 0.5}
+    Label:
+        text: root.tomorrow_temperature_max_label
+        font_size: '32sp'
+        color: 1.000, 0.980, 0.804, 1
+    Label:
+        text: root.tomorrow_conditions_label
+        font_size: '32sp'
+        color: 1.000, 0.980, 0.804, 1
+
 
 <WeatherWidget>:
     orientation: 'vertical'
