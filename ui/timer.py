@@ -1,4 +1,5 @@
 # coding=utf-8
+from __future__ import print_function
 import os
 from kivy.app import App
 from kivy.core.audio import SoundLoader
@@ -11,7 +12,8 @@ from libs.widgets.LabelB import LabelB
 
 class TimerWidget(LabelB):
     can_remote = True
-
+    alarmsound = SoundLoader.load(os.path.join(PROJECT_PATH, 'libs', 'timer', 'alarm.mp3'))
+    alarmsound.loop = True
     timer_text = StringProperty()
     timer_color = ListProperty()
     timer_bgcolor = ListProperty()
@@ -22,7 +24,7 @@ class TimerWidget(LabelB):
         super(TimerWidget, self).__init__(**kwargs)
         self.app = App.get_running_app()
         self.timer_provider = Timer()
-        self.alarmsound = SoundLoader.load(os.path.join(PROJECT_PATH, 'libs', 'timer', 'beep.wav'))
+        self.alarmsound.play()
 
         for key in Timer.all_keys:
             self.app.key_handler.bind(key, self.timer_provider.key)
@@ -47,7 +49,9 @@ class TimerWidget(LabelB):
                 self.timer_color = [0, 0, 0, 1]
                 self.timer_bgcolor = [1, 0, 0, 1]
             self.alarm_odd = not self.alarm_odd
-            self.alarmsound.play()
+            if self.alarmsound.state != 'play':
+                self.alarmsound.play()
         else:
+            self.alarmsound.stop()
             self.timer_color = [0.529, 0.808, 0.922, 1]
             self.timer_bgcolor = [0, 0, 0, 1]
