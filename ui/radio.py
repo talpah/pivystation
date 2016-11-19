@@ -64,7 +64,7 @@ class RadioWidget(BoxLayout):
     def next_stream(self, *args):
         if self.current_stream:
             self.current_stream.stop()
-        self.stream_list.rotate(1)
+        self.stream_list.rotate(-1)
         self.select_stream(self.stream_list[0])
         self.play()
 
