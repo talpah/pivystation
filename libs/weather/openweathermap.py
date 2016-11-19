@@ -31,6 +31,10 @@ class Weather(object):
                 self.forecast_tomorrow_data[place] = self.api_object.daily_forecast(place).get_weather_at(
                     tomorrow.replace(hour=12))
                 self.update_stamps[place] = datetime.now()
+            except AttributeError as e:
+                self.update_stamps[place] = datetime.now()
+                Logger.error('WEATHER: Failed to get data: {}'.format(e))
+                return False
             except APICallError as e:
                 self.update_stamps[place] = datetime.now()
                 Logger.error('WEATHER: Failed to get data: {}'.format(e))
