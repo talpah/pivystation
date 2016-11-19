@@ -25,17 +25,27 @@ def radio():
     # app.logger.error(str(kivy_app.root.__dict__))
     return {'radio': radio_object}
 
+
 @app.route('/radio/next')
 def radio_next():
     kivy_app = App.get_running_app()
     kivy_app.myradio.next_stream()
     return redirect('/radio')
 
+
 @app.route('/radio/prev')
 def radio_prev():
     kivy_app = App.get_running_app()
     kivy_app.myradio.prev_stream()
     return redirect('/radio')
+
+
+@app.route('/radio/direct/<id>')
+def radio_set(id):
+    kivy_app = App.get_running_app()
+    kivy_app.myradio.set_stream(id)
+    return redirect('/radio')
+
 
 @app.route('/radio/toggle')
 def radio_toggle():

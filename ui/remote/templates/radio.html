@@ -9,13 +9,13 @@
             <table class="table table-condensed">
                 <tr>
                     <td>
-                        <a href="/radio/prev" class="btn">
+                        <a href="/radio/prev" class="btn btn-default">
                             <span class="glyphicon glyphicon-step-backward"></span>
                         </a>
-                        <a href="/radio/toggle" class="btn">
+                        <a href="/radio/toggle" class="btn btn-default">
                             <span class="glyphicon glyphicon-{% if radio.state %}stop{% else %}play{% endif %}"></span>
                         </a>
-                        <a href="/radio/next" class="btn">
+                        <a href="/radio/next" class="btn btn-default">
                             <span class="glyphicon glyphicon-step-forward"></span>
                         </a>
                     </td>
@@ -26,7 +26,7 @@
             <caption>Stations</caption>
             {% for stream in radio.stream_list %}
                 <tr {% if radio.selected_stream == loop.index0 %} class="bg-success" {% endif %}>
-                    <td>{{ stream.1 }}</td>
+                    <td><a href="/radio/direct/{{ loop.index0 }}">{{ stream.1 }}</a></td>
                     <td>{{ stream.0 }}</td>
                 </tr>
             {% endfor %}

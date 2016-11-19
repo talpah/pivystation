@@ -67,6 +67,15 @@ class RadioWidget(BoxLayout):
         if self._loaded_stream:
             self._loaded_stream.volume = self.current_volume
 
+    def set_stream(self, id):
+        if id < 0 or id >= len(self.stream_list):
+            return False
+        if self._loaded_stream:
+            self._loaded_stream.stop()
+        self.selected_stream = id
+        self.select_stream(self.current_stream)
+        self.play()
+
     def next_stream(self, *args):
         if self._loaded_stream:
             self._loaded_stream.stop()
