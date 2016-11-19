@@ -1,3 +1,5 @@
+# Raspberry Pi Info screen
+
 # Requirements Setup
 
 ## Debian/Ubuntu based systems:
@@ -20,3 +22,7 @@ then
 - <kbd>Enter</kbd> - Start timer/Stop alarm
 - <kbd>Esc</kbd>, <kbd>Backspace</kbd> - Reset timer/Stop alarm
 - <kbd>Up</kbd>, <kbd>Down</kbd> - Prev/Next news title
+
+# Tips
+
+- If you get white screens, missing elements, artifacts on screen, try to increase the GPU memory (GPU/RAM split)
