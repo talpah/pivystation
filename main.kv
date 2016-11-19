@@ -36,23 +36,25 @@
 
 <RadioWidget>:
     orientation: 'vertical'
-    Label:
-        id: 'radiolabel'
-        text: root.radio_label
-        font_size: '48sp'
-        color: 1.000, 1.000, 1.000, 1
-        markup: True
-        text_size: root.width, None
-        size: self.texture_size
-        valign: 'top'
     BoxLayout:
         Label:
+            id: 'radiolabel'
+            text: root.radio_label
+            font_size: '48sp'
+            color: 1.000, 1.000, 1.000, 1
+            markup: True
+            text_size: self.size
+    BoxLayout:
+        size_hint: 1, 0
+        Label:
+            size_hint: 1, 0
             font_size: '36sp'
             text: root.play_status
             text_size: self.size
             halign: 'left'
             valign: 'middle'
         Label:
+            size_hint: 1, 0
             font_size: '36sp'
             text: root.volume_value
             text_size: self.size
