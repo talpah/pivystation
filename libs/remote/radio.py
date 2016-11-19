@@ -43,7 +43,7 @@ def radio_prev():
 @app.route('/radio/direct/<id>')
 def radio_set(id):
     kivy_app = App.get_running_app()
-    kivy_app.myradio.set_stream(id)
+    kivy_app.myradio.set_stream(int(id))
     return redirect('/radio')
 
 
