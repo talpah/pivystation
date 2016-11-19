@@ -62,6 +62,7 @@ class RadioWidget(BoxLayout):
         return self.stream_list[self.selected_stream]
 
     def select_stream(self, url):
+        self.build_label()
         self._loaded_stream = MySoundLoader.load(url)
         if self._loaded_stream:
             self._loaded_stream.volume = self.current_volume
