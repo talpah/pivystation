@@ -150,7 +150,12 @@ class MainApp(App):
         config.setdefaults('news', {'cycle_interval': 15, 'provider': 'mediafax'})
         config.setdefaults('radio', {'play_on_start': 'no',
                                      'streams': "\nhttp://astreaming.europafm.ro:8000/europafm_aacp48k#Europa FM#aac"
-                                                "\nhttp://edge126.rdsnet.ro:84/profm/dancefm.mp3#Dance FM"})
+                                                "\nhttp://astreaming.radio21.ro:8000/radio21_mp3_64k#Radio 21#mp3"
+                                                "\nhttp://live.itsybitsy.ro:8000/itsybitsy#ItsyBitsy#mp3"
+                                                "\nhttp://edge126.rdsnet.ro:84/profm/dancefm.mp3#Dance FM"
+                                                "\nhttp://live2.radiodeea.ro:8090/#Radio DEEA#aac"
+                                                "\nhttp://astreaming.vibefm.ro:8000/vibefm_aacp48k#Vibe FM#aac"
+                                     })
         config.setdefaults('weather', {'temperature_unit_display': 'C', 'language': 'ro', 'temperature_unit': 'celsius',
                                        'provider': 'openweathermap', 'api_key': '1a6b3c983f34975e1634037a882c365a',
                                        'wind_speed_unit': 'kph', 'default_place': 'Bucuresti',
