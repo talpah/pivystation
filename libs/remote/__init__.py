@@ -1,4 +1,6 @@
 import os
+import threading
+
 from flask import Flask
 
 from libs import PROJECT_PATH
@@ -18,10 +20,16 @@ import libs.remote.radio
 import libs.remote.shutdown
 
 
-def start_server(settings, logger):
+def run(settings, logger):
     try:
         logger.info('Remote: Starting on {host}:{port}'.format(**settings))
         app.logger.addHandler(logger)
         app.run(**settings)
-    except Exception, e:
+    except Exception as e:
         logger.warning('Remote: Start failed:  %s' % str(e))
+
+
+def start(settings, logger):
+    thread = threading.Thread(target=run, args=(settings, logger))
+    thread.daemon = True
+    thread.start()

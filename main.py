@@ -8,6 +8,7 @@ from collections import deque
 from random import randint
 
 from kivy.app import App
+from kivy.logger import Logger
 from kivy.core.window import Window
 from kivy.properties import ObjectProperty, ReferenceListProperty, NumericProperty, Clock
 from kivy.uix.boxlayout import BoxLayout
@@ -16,6 +17,7 @@ from kivy.uix.widget import Widget
 from kivy.vector import Vector
 
 # noinspection PyUnresolvedReferences
+from libs.remote import start
 from ui import *
 
 locale.setlocale(locale.LC_ALL, 'ro_RO.utf8')
@@ -143,7 +145,7 @@ class MainApp(App):
         config.setdefaults('main', {'screensaver_enabled': 'yes',
                                     'screensaver_timeout': 60 * 15,
                                     })
-        config.setdefaults('remote', {'enabled': 'no',
+        config.setdefaults('remote', {'enabled': 'yes',
                                       'host': '0.0.0.0',
                                       'port': 5000,
                                       'debug': False})
@@ -187,6 +189,7 @@ class MainApp(App):
                 'port': self.config.getint('remote', 'port'),
                 'debug': self.config.getboolean('remote', 'debug'),
             }
+            start(self.remote_settings, Logger)
 
         self._reset_screensaver()
 
