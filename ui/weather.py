@@ -50,7 +50,7 @@ class WeatherWidget(BoxLayout):
         self.weathericon_source = u"libs/weather/icons/{}.png".format(weather_data['icon'])
         self.location_label = u"{}: {}".format(weather_data['place'], weather_data['conditions'])
         self.temperature_label = u"{:.1g} ° C".format(weather_data['temperature'])
-        self.temperatureminmax_label = u"{:.2g} / {:.2g}".format(weather_data['temperature_min'],
+        self.temperatureminmax_label = u"{:.1g} / {:.1g}".format(weather_data['temperature_min'],
                                                                  weather_data['temperature_max'])
         last_updated = format_timedelta(self.weather_provider.update_stamps[place] - datetime.now(),
                                         granularity='minute',
@@ -90,7 +90,7 @@ class ForecastWidget(BoxLayout):
         today_data = self.weather_provider.today(place)
         tomorrow_data = self.weather_provider.tomorrow(place)
         self.today_weathericon_source = u"libs/weather/icons/{}.png".format(today_data['icon'])
-        self.today_temperature_max_label = u"{:.2g} ° C".format(today_data['temperature_max'])
+        self.today_temperature_max_label = u"{:.1g} ° C".format(today_data['temperature_max'])
         self.today_conditions_label = today_data['conditions']
         self.tomorrow_weathericon_source = u"libs/weather/icons/{}.png".format(tomorrow_data['icon'])
         self.tomorrow_temperature_max_label = u"{:.1g} ° C".format(tomorrow_data['temperature_max'])
