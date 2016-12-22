@@ -69,6 +69,10 @@ class FlyingWidget(BoxLayout):
         self.pos = Vector(*self.velocity) + self.pos
 
 
+class VideoScreen(Screen):
+    vsource = ObjectProperty(None)
+
+
 class SaverScreen(Screen):
     saver = ObjectProperty(None)
     animation_scheduler = None
@@ -111,6 +115,14 @@ class MainApp(App):
     saver_screen = 'saver'
     saver_scheduler = None
     is_it_morning = False
+
+    def select_screen(self, screen_name):
+        maxc, cc = 10, 0
+        while self.screen_manager.current != screen_name:
+            self._key_left()
+            cc += 1
+            if cc > maxc:
+                break
 
     def _key_right(self, *args):
         self.screens.rotate(1)
@@ -166,6 +178,7 @@ class MainApp(App):
     def build(self):
         screens = [
             ('main', MainScreen),
+            ('video', VideoScreen),
             ('saver', SaverScreen)
         ]
         keys = [

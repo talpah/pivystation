@@ -2,6 +2,7 @@ from collections import deque
 
 from kivy import Logger
 from kivy.app import App
+from kivy.core.video import Video
 from kivy.properties import StringProperty
 from kivy.uix.boxlayout import BoxLayout
 
@@ -64,8 +65,15 @@ class RadioWidget(BoxLayout):
     def select_stream(self, url):
         self.build_label()
         self._loaded_stream = MySoundLoader.load(url)
+        if not self._loaded_stream:
+            if self._loaded_stream:
+                self._loaded_stream.stop()
+            self.app.select_screen('video')
+            self.app.screen_manager.current_screen.vsource = url
+            return False
         if self._loaded_stream:
             self._loaded_stream.volume = self.current_volume
+        return True
 
     def set_stream(self, id):
         if id < 0 or id >= len(self.stream_list):
@@ -73,8 +81,8 @@ class RadioWidget(BoxLayout):
         if self._loaded_stream:
             self._loaded_stream.stop()
         self.selected_stream = id
-        self.select_stream(self.current_stream)
-        self.play()
+        if self.select_stream(self.current_stream):
+            self.play()
 
     def next_stream(self, *args):
         if self._loaded_stream:
@@ -82,8 +90,8 @@ class RadioWidget(BoxLayout):
         self.selected_stream += 1
         if self.selected_stream >= len(self.stream_list):
             self.selected_stream = 0
-        self.select_stream(self.current_stream)
-        self.play()
+        if self.select_stream(self.current_stream):
+            self.play()
 
     def prev_stream(self, *args):
         if self._loaded_stream:
@@ -91,8 +99,8 @@ class RadioWidget(BoxLayout):
         self.selected_stream -= 1
         if self.selected_stream < 0:
             self.selected_stream = len(self.stream_list) - 1
-        self.select_stream(self.current_stream)
-        self.play()
+        if self.select_stream(self.current_stream):
+            self.play()
 
     def playpause(self, *args):
         if self.is_playing:
@@ -105,7 +113,7 @@ class RadioWidget(BoxLayout):
             self.select_stream(self.current_stream)
         try:
             self._loaded_stream.play()
-            Logger.info("Radio: playing %s" % self.stream_list[0])
+            Logger.info("Radio: playing %s" % self.current_stream)
             self.is_playing = True
             self.play_status = 'Radio: Pornit'
         except Exception as e:
