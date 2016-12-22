@@ -28,6 +28,9 @@ class RadioWidget(BoxLayout):
         self.play_status = 'Radio: Oprit'
         self.volume_value = 'Volum 100%'
 
+        self.app.key_handler.bind('f4', self.prev_stream)
+        self.app.key_handler.bind('f5', self.playpause)
+        self.app.key_handler.bind('f6', self.next_stream)
         self.app.key_handler.bind('numpaddivide', self.playpause)
         self.app.key_handler.bind('numpadmul', self.next_stream)
         self.app.key_handler.bind('numpadadd', self.vol_up)
