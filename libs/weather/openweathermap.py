@@ -28,10 +28,13 @@ class Weather(object):
                 self.weather_data[place] = self.api_object.weather_at_place(place).get_weather()
                 self.forecast_today_data[place] = self.api_object.daily_forecast(place).get_weather_at(
                     now.replace(hour=12))
-                self.forecast_tomorrow_data[place] = self.api_object.daily_forecast(place).get_weather_at(
-                    tomorrow.replace(hour=12))
+                try:
+                    self.forecast_tomorrow_data[place] = self.api_object.daily_forecast(place).get_weather_at(
+                        tomorrow.replace(hour=12))
+                except Exception:
+                    self.forecast_tomorrow_data[place] = {}
                 self.update_stamps[place] = datetime.now()
-            except AttributeError as e:
+            except Exception as e:
                 self.update_stamps[place] = datetime.now()
                 Logger.error('WEATHER: Failed to get data: {}'.format(e))
                 return False
@@ -73,7 +76,9 @@ class Weather(object):
         return response
 
     def tomorrow(self, place):
-        if not self.refresh(place):
+        if not self.refresh(place) \
+                or place not in self.forecast_tomorrow_data \
+                or not self.forecast_tomorrow_data[place]:
             return {
                 'place': place,
                 'conditions': 'EROARE',
@@ -102,7 +107,9 @@ class Weather(object):
         return response
 
     def today(self, place):
-        if not self.refresh(place):
+        if not self.refresh(place) \
+                or place not in self.forecast_today_data\
+                or not self.forecast_today_data[place]:
             return {
                 'place': place,
                 'conditions': 'EROARE',
